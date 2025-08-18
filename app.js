@@ -4,6 +4,7 @@ const app = express()
 // get the port from env variable
 const PORT = process.env.PORT || 5000
 
+// Health check endpoint for Render/monitoring services to verify app is running
 app.get('/health', (req, res) => {
   res.send('ok')
 })
