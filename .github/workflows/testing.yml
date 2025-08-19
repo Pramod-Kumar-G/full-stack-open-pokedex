@@ -5,6 +5,10 @@ on:
     branches:
       - main
 
+env:
+  # CONDITION: ${{ contains('kissa', 'ss') && contains('koira', 'ra') && contains('pretty long array of criteria to repeat in multiple places', 'crit') }}
+  CONDITION: ${{github.event_name == 'push' && !contains(toJson(github.event.commits.*.message), '#skip') }}
+
 jobs:
   a_test_job:
     runs-on: ubuntu-latest
@@ -22,3 +26,5 @@ jobs:
         env:
           COMMIT_MESSAGES: ${{ toJson(github.event.commits.*.message) }}
         run: echo "$COMMIT_MESSAGES"
+      - name: print condition
+        run: echo $CONDITION
