@@ -41,6 +41,7 @@ jobs:
         run: curl ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
 
       - name: Bump version and push tag
+        if: ${{ github.event_name == 'push' }}
         uses: anothrNick/github-tag-action@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
