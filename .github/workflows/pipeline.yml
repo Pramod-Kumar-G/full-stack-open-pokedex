@@ -40,8 +40,18 @@ jobs:
           retention-days: 30
 
       - name: Trigger Deployment
+        id: deploy
         if: ${{ env.CONDITION == 'true' }}
         run: curl ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+
+      - name: Test Success
+          uses: rjstone/discord-webhook-notify@v2
+          # if: ${{steps.deploy.outcome == "success"}}
+          if: success()
+          with:
+              webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+              severity: info
+              details: A new version of Pokedex deployed!
 
   tag_release:
     needs: [simple_deployment_pipeline]
@@ -54,3 +64,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEFAULT_BUMP: patch
+
