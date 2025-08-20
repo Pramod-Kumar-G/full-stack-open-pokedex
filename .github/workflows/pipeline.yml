@@ -24,6 +24,7 @@ jobs:
       - name: Check style
         run: npm run eslint
       - name: Build code
+        id: build
         run: npm run build
       - name: Test code
         run: npm run test
@@ -44,14 +45,23 @@ jobs:
         if: ${{ env.CONDITION == 'true' }}
         run: curl ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
 
-      - name: Test Success
-        uses: rjstone/discord-webhook-notify@v2
-        # if: ${{steps.deploy.outcome == "success"}}
-        if: success()
+      - uses: sarisia/actions-status-discord@v1
+        if: ${{steps.deploy.outcome == 'success'}}
         with:
-          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
-          severity: info
-          details: A new version of Pokedex deployed!
+          webhook: ${{ secrets.DISCORD_WEBHOOK }}
+          status: ${{ job.status }}
+          title: 'Deploy'
+          description: 'A new version of Pokedex deployed!'
+          username: Pokedex
+
+      - uses: sarisia/actions-status-discord@v1
+        if: ${{steps.build.outcome == 'failure'}}
+        with:
+          webhook: ${{ secrets.DISCORD_WEBHOOK }}
+          status: ${{ job.status }}
+          title: 'Build'
+          description: 'Build Failed'
+          username: Pokedex
 
   tag_release:
     needs: [simple_deployment_pipeline]
