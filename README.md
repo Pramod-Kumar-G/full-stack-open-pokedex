@@ -1,6 +1,7 @@
 # Full Stack open CI/CD
 
-This repository is used for the CI/CD module of the Full stack open course
+This repository contains the solutions for exercises 11.1-11.19 of Fullstack Open part 11.
+The solutions for exercise 11.20 and 11.21 can be found [here](https://github.com/Pramod-Kumar-G/full-stack-open-phonebook).
 
 ## Commands
 
